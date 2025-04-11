@@ -24,7 +24,7 @@ const Blogs = () => {
       const matched = items.filter((item) => favorites.includes(item.id));
       setFavItems(matched);
     } else {
-      setFavItems([]); // Clear if empty
+      setFavItems([]); 
     }
   }, [items, favorites]);
 
