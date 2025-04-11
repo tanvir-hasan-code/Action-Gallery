@@ -61,7 +61,7 @@ const Blogs = () => {
               <tr className="font-bold text-xl">
                 <th>Items</th>
                 <th>Current Bid</th>
-                
+                <th>Time Left</th>
                 <th>Bid Now</th>
               </tr>
             </thead>
