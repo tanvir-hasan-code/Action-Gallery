@@ -4,7 +4,7 @@ const Banner = () => {
 	return (
 		<div className=''>
 			<div className='relative'>
-				<img className='h-[600px] w-full object-cover' src="../../../image/Banner-min.jpg" alt="Banner" />
+				<img className='h-[600px] w-full object-cover' src="https://i.ibb.co.com/5hRL32Lq/Banner-min.jpg" alt="Banner" />
 
 				
 				<div className='absolute inset-0 flex flex-col items-start justify-center px-20 space-y-6'>
