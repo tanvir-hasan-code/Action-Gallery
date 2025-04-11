@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaBookmark } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Blogs = () => {
   const [items, setItems] = useState([]);
@@ -31,6 +33,7 @@ const Blogs = () => {
       const updated = [...favorites, id];
       setFavorites(updated);
       localStorage.setItem("favorites", JSON.stringify(updated));
+      toast.success("✅ Item Added to your Favorite Lists");
     }
   };
 
@@ -43,49 +46,53 @@ const Blogs = () => {
   return (
     <div className="main-container flex gap-7">
       <div className="p-6 bg-white mt-5 rounded-4xl w-[70%]">
-        <table className="table w-full">
-          <thead>
-            <tr className="font-bold text-xl">
-              <th>Items</th>
-              <th>Current Bid</th>
-              <th>Time Left</th>
-              <th>Bid Now</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td className="flex items-center gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                  <span className="font-semibold ">{item.title}</span>
-                </td>
-                <td className="text-center font-semibold">$ {item.bid}</td>
-                <td className="text-blue-600 font-medium text-center">{item.timeLeft}</td>
-                <td>
-                  <button
-                    className={`text-2xl flex mx-auto ${
-                      favorites.includes(item.id)
-                        ? "text-red-200 cursor-not-allowed"
-                        : "text-gray-500"
-                    }`}
-                    onClick={() => handleAddToFavorites(item.id)}
-                    disabled={favorites.includes(item.id)}
-                  >
-                    <FaBookmark />
-                  </button>
-                </td>
+        <div className="border rounded-2xl border-gray-300">
+          <table className="table w-full">
+            <thead>
+              <tr className="font-bold text-xl">
+                <th>Items</th>
+                <th>Current Bid</th>
+                <th>Time Left</th>
+                <th>Bid Now</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td className="flex items-center gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <span className="font-semibold ">{item.title}</span>
+                  </td>
+                  <td className="text-center font-semibold">$ {item.bid}</td>
+                  <td className="text-blue-600 font-medium text-center">
+                    {item.timeLeft}
+                  </td>
+                  <td>
+                    <button
+                      className={`text-2xl flex mx-auto ${
+                        favorites.includes(item.id)
+                          ? "text-red-200 cursor-not-allowed"
+                          : "text-gray-500"
+                      }`}
+                      onClick={() => handleAddToFavorites(item.id)}
+                      disabled={favorites.includes(item.id)}
+                    >
+                      <FaBookmark />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="mt-5 bg-white p-4 rounded-4xl w-[30%]">
         <div className="">
-          <h2 className="text-2xl text-center font-semibold mb-4 border-b-2 border-gray-300 pb-3">
+          <h2 className="text-2xl text-center font-semibold mb-4 border-b-2 border-gray-300 pb-3 text-blue-500">
             🤍 Favorite Items
           </h2>
           {favItems.length === 0 ? (
@@ -100,17 +107,20 @@ const Blogs = () => {
               {favItems.map((fav) => (
                 <li
                   key={fav.id}
-                  className="flex items-center justify-between gap-3 bg-white p-2 rounded shadow"
+                  className="flex items-center justify-between gap-3 bg-white p-2 rounded shadow border"
                 >
                   <div className="flex items-center gap-3">
                     <img
                       src={fav.image}
                       alt={fav.title}
-                      className="w-14 h-14 object-cover rounded"
+                      className="w-14 h-14 object-cover rounded border"
                     />
                     <span className="font-semibold">
-                      {fav.title}{" "}
-                      <p className="font-normal">Price: {fav.bid}</p>
+                      {fav.title}
+                      <div className="flex gap-3">
+                        <p className="font-normal">Price: {fav.bid} $</p>
+                        <p className="font-normal">Bids:{fav.bids}</p>
+                      </div>
                     </span>
                   </div>
                   <button
@@ -125,13 +135,20 @@ const Blogs = () => {
           )}
           ;
           <div className="border-t-2 flex justify-between pt-2">
-            <h1 className="text-xl font-semibold">Total bids Amount</h1>
-            <h1 className="text-xl font-semibold">
-              ${totalBidAmount.toFixed(2)}
-            </h1>
+            <h1 className="text-xl font-bold">Total bids Amount</h1>
+            <h1 className="text-xl font-bold">${totalBidAmount.toFixed(2)}</h1>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </div>
   );
 };
