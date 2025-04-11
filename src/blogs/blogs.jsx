@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { FaBookmark } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+// Blog Component
 const Blogs = () => {
   const [items, setItems] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [favItems, setFavItems] = useState([]);
-
+// Data Fetch
   useEffect(() => {
     fetch("data.json")
       .then((res) => res.json())
