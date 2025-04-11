@@ -102,7 +102,7 @@ const Blogs = () => {
       <div className="mt-5 bg-white p-4 rounded-4xl w-[30%]">
         <div className="">
           <h2 className="text-2xl text-center font-semibold mb-4 border-b-2 border-gray-300 pb-3 text-blue-500">
-            🤍 Favorite Items
+            🤍 Favorite Item
           </h2>
           {favItems.length === 0 ? (
             <div className="w-9/12 mx-auto text-center grid gap-2 mt-7 border-b-2 border-gray-300 pb-7">
