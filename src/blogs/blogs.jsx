@@ -41,6 +41,15 @@ const Blogs = () => {
     const updated = favorites.filter((favId) => favId !== id);
     setFavorites(updated);
     localStorage.setItem("favorites", JSON.stringify(updated));
+    toast.info("❌ Item Removed from Favorite List", {
+      style: {
+        background: "#ffe4e6",   
+        color: "#b91c1c",        
+        fontWeight: "bold",
+        borderRadius: "10px",
+      },
+      icon: "🗑️",
+    });
   };
   const totalBidAmount = favItems.reduce((sum, item) => sum + item.bid, 0);
   return (
