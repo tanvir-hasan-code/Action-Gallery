@@ -17,16 +17,11 @@ function App() {
               Active Auctions
             </h1>
             <p className="text-xl text-gray-500">
-              Discover and bid on extraordinary items{" "}
+              Discover and bid on extraordinary items
             </p>
-            <div className="main-container flex gap-7">
-            <div className="child-div1 w-[70%]">
+            <div>
             <Blogs></Blogs>
             </div>
-            <div className="child-div2 w-[30%]">
-            <h1 className="text-center border">Hello World</h1>
-            </div>
-          </div>
           </div>
         </div>
         <Footer></Footer>

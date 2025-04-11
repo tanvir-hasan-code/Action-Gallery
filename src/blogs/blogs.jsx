@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { FaBookmark } from "react-icons/fa";
 
 const Blogs = () => {
-  const [items, setItems] = useState([]);         // সব ডাটা
-  const [favorites, setFavorites] = useState([]); // আইডি গুলো
-  const [favItems, setFavItems] = useState([]);   // ম্যাচিং আইটেমগুলো
+  const [items, setItems] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [favItems, setFavItems] = useState([]);
 
-  // ✅ Step 1: data.json থেকে ডাটা লোড করা
   useEffect(() => {
-    fetch('data.json')
+    fetch("data.json")
       .then((res) => res.json())
       .then((data) => setItems(data));
   }, []);
 
-  // ✅ Step 2: লোকাল স্টোরেজ থেকে ফেভারিট আইডি লোড
   useEffect(() => {
     const savedIds = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(savedIds);
   }, []);
 
-  // ✅ Step 3: আইডি দিয়ে matching item গুলো খুঁজে বের করা
   useEffect(() => {
     if (items.length && favorites.length) {
-      const matched = items.filter(item => favorites.includes(item.id));
+      const matched = items.filter((item) => favorites.includes(item.id));
       setFavItems(matched);
+    } else {
+      setFavItems([]); // Clear if empty
     }
   }, [items, favorites]);
 
-  // ✅ Step 4: একটি আইটেম ফেভারিটে অ্যাড করা (লোকাল স্টোরেজে শুধু আইডি সেভ)
   const handleAddToFavorites = (id) => {
     if (!favorites.includes(id)) {
       const updated = [...favorites, id];
@@ -36,51 +34,103 @@ const Blogs = () => {
     }
   };
 
+  const handleRemoveFavorite = (id) => {
+    const updated = favorites.filter((favId) => favId !== id);
+    setFavorites(updated);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+  };
+  const totalBidAmount = favItems.reduce((sum, item) => sum + item.bid, 0);
   return (
-    <div className="p-6 bg-white mt-5 rounded-4xl">
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th>Items</th>
-            <th>Current Bid</th>
-            <th>Time Left</th>
-            <th>Bid Now</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map(item => (
-            <tr key={item.id}>
-              <td className="flex items-center gap-4">
-                <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded" />
-                <span>{item.title}</span>
-              </td>
-              <td>$ {item.bid}</td>
-              <td className="text-blue-600 font-medium">{item.timeLeft}</td>
-              <td>
-                <button className="text-2xl" onClick={() => handleAddToFavorites(item.id)}>
-                  <FaBookmark />
-                </button>
-              </td>
+    <div className="main-container flex gap-7">
+      <div className="p-6 bg-white mt-5 rounded-4xl w-[70%]">
+        <table className="table w-full">
+          <thead>
+            <tr className="font-bold text-xl">
+              <th>Items</th>
+              <th>Current Bid</th>
+              <th>Time Left</th>
+              <th>Bid Now</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Favorites Section */}
-      <div className="mt-10 bg-gray-100 p-4 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Favorite Items</h2>
-        {favItems.length === 0 ? (
-          <p>No items added yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {favItems.map(fav => (
-              <li key={fav.id} className="flex items-center gap-3">
-                <img src={fav.image} alt={fav.title} className="w-10 h-10 object-cover rounded" />
-                <span>{fav.title}</span>
-              </li>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.id}>
+                <td className="flex items-center gap-4">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <span className="font-semibold ">{item.title}</span>
+                </td>
+                <td className="text-center font-semibold">$ {item.bid}</td>
+                <td className="text-blue-600 font-medium text-center">{item.timeLeft}</td>
+                <td>
+                  <button
+                    className={`text-2xl flex mx-auto ${
+                      favorites.includes(item.id)
+                        ? "text-red-200 cursor-not-allowed"
+                        : "text-gray-500"
+                    }`}
+                    onClick={() => handleAddToFavorites(item.id)}
+                    disabled={favorites.includes(item.id)}
+                  >
+                    <FaBookmark />
+                  </button>
+                </td>
+              </tr>
             ))}
-          </ul>
-        )}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-5 bg-white p-4 rounded-4xl w-[30%]">
+        <div className="">
+          <h2 className="text-2xl text-center font-semibold mb-4 border-b-2 border-gray-300 pb-3">
+            🤍 Favorite Items
+          </h2>
+          {favItems.length === 0 ? (
+            <div className="w-9/12 mx-auto text-center grid gap-2 mt-7 border-b-2 border-gray-300 pb-7">
+              <h1 className="font-bold text-xl">No favorites yet.</h1>
+              <p className="text-gray-400">
+                Click the heart icon on any item to add it to your favorites
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {favItems.map((fav) => (
+                <li
+                  key={fav.id}
+                  className="flex items-center justify-between gap-3 bg-white p-2 rounded shadow"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={fav.image}
+                      alt={fav.title}
+                      className="w-14 h-14 object-cover rounded"
+                    />
+                    <span className="font-semibold">
+                      {fav.title}{" "}
+                      <p className="font-normal">Price: {fav.bid}</p>
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleRemoveFavorite(fav.id)}
+                    className="text-red-500 text-lg hover:text-red-700 btn btn-xs"
+                  >
+                    x
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          ;
+          <div className="border-t-2 flex justify-between pt-2">
+            <h1 className="text-xl font-semibold">Total bids Amount</h1>
+            <h1 className="text-xl font-semibold">
+              ${totalBidAmount.toFixed(2)}
+            </h1>
+          </div>
+        </div>
       </div>
     </div>
   );
